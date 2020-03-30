@@ -2,8 +2,8 @@
 ### mini版spring
 ### 支持功能：
 * ioc
+* aop
 
 ### todo list
-* aop
 * jdbc
 * 事务

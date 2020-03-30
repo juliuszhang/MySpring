@@ -5,7 +5,9 @@ import org.myspring.annotation.Service;
 import org.myspring.config.ConfigHelper;
 import org.myspring.util.ClassUtil;
 
+import java.lang.annotation.Annotation;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,16 @@ public final class ClassHelper {
 
     public static Set<Class<?>> getControllerClassSet() {
         return CLASS_SET.stream().filter(cls -> cls.isAnnotationPresent(Controller.class)).collect(Collectors.toSet());
+    }
+
+    public static Set<Class<?>> getClassSetByAnnotation(Class<? extends Annotation> annotationClass) {
+        return CLASS_SET.stream().filter(cls -> cls.isAnnotationPresent(annotationClass)).collect(Collectors.toSet());
+    }
+
+    public static Set<Class<?>> getClassSetBySuper(Class<?> superClass) {
+        return CLASS_SET.stream().filter(
+                cls -> superClass.isAssignableFrom(cls) && !superClass.equals(cls)
+        ).collect(Collectors.toSet());
     }
 
 }

@@ -37,6 +37,10 @@ public class BeanHelper {
         return (T) BEAN_CONTAINER.get(cls);
     }
 
+    public static void setBean(Class<?> cls, Object obj) {
+        BEAN_CONTAINER.put(cls, obj);
+    }
+
     public static Map<Class<?>, Object> getBeanMap() {
         return Collections.unmodifiableMap(BEAN_CONTAINER);
     }
