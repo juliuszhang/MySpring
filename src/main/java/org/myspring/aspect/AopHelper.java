@@ -1,8 +1,10 @@
 package org.myspring.aspect;
 
 import org.myspring.annotation.Aspect;
+import org.myspring.annotation.Service;
 import org.myspring.bean.BeanHelper;
 import org.myspring.bean.ClassHelper;
+import org.myspring.jdbc.TransactionProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +23,7 @@ public class AopHelper {
     static {
         try {
             Map<Class<?>, Set<Class<?>>> proxyMap = createProxyMap();
+            addTransactionProxy(proxyMap);
             Map<Class<?>, List<Proxy>> targetMap = createTargetMap(proxyMap);
             for (Map.Entry<Class<?>, List<Proxy>> targetEntry : targetMap.entrySet()) {
                 Class<?> targetClass = targetEntry.getKey();
@@ -31,6 +34,11 @@ public class AopHelper {
         } catch (Exception e) {
             LOG.error("aop init failure.", e);
         }
+    }
+
+    private static void addTransactionProxy(Map<Class<?>, Set<Class<?>>> proxyMap) {
+        Set<Class<?>> serviceClassSet = ClassHelper.getClassSetByAnnotation(Service.class);
+        proxyMap.put(TransactionProxy.class, serviceClassSet);
     }
 
 

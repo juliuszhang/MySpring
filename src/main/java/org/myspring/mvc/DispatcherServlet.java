@@ -9,7 +9,10 @@ import org.myspring.util.JSONUtil;
 import org.myspring.util.ReflectionUtil;
 import org.myspring.util.StreamUtil;
 
-import javax.servlet.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -58,13 +61,8 @@ public class DispatcherServlet extends HttpServlet {
 
         String body = CodecUtil.decodeURL(StreamUtil.getString(req.getInputStream()));
         if (!StringUtils.isEmpty(body)) {
-            String[] params = body.split("&");
-            for (String param : params) {
-                String[] paramPair = param.split("=");
-                String name = paramPair[0];
-                String value = paramPair[1];
-                paramMap.put(name, value);
-            }
+            Map map = JSONUtil.fromJson(body, Map.class);
+            paramMap.putAll(map);
         }
 
         Param param = new Param(paramMap);
