@@ -37,18 +37,23 @@ public class AopHelper {
     private static Set<Class<?>> createTargetClassSet(Aspect aspect) {
         Set<Class<?>> targetClassSet = new HashSet<>();
         Class<? extends Annotation> annotation = aspect.value();
-        if (annotation != null && !annotation.equals(Aspect.class)) {
+        if (!annotation.equals(Aspect.class)) {
             targetClassSet.addAll(ClassHelper.getClassSetByAnnotation(annotation));
         }
         return targetClassSet;
     }
 
+    /**
+     * 获得切面代理与要增强的类的对应关系数据
+     */
     private static Map<Class<?>, Set<Class<?>>> createProxyMap() {
         Map<Class<?>, Set<Class<?>>> proxyMap = new HashMap<>();
+        //找到继承于AspectProxy的子类(也就是切面)
         Set<Class<?>> proxyClassSet = ClassHelper.getClassSetBySuper(AspectProxy.class);
         for (Class<?> proxyClass : proxyClassSet) {
             if (proxyClass.isAnnotationPresent(Aspect.class)) {
                 Aspect aspect = proxyClass.getAnnotation(Aspect.class);
+                //找到切面需要增强的类
                 Set<Class<?>> targetClassSet = createTargetClassSet(aspect);
                 proxyMap.put(proxyClass, targetClassSet);
 
@@ -57,6 +62,9 @@ public class AopHelper {
         return proxyMap;
     }
 
+    /**
+     * 生成要增强的类与代理切面的关联关系
+     */
     private static Map<Class<?>, List<Proxy>> createTargetMap(Map<Class<?>, Set<Class<?>>> proxyMap) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Map<Class<?>, List<Proxy>> targetMap = new HashMap<>();
         for (Map.Entry<Class<?>, Set<Class<?>>> proxyEntry : proxyMap.entrySet()) {

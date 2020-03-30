@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  * @author yibozhang
  * @date 2020/3/29
  */
-public class AspectProxy implements Proxy {
+public abstract class AspectProxy implements Proxy {
 
     private static final Logger LOG = LoggerFactory.getLogger(AspectProxy.class);
 
@@ -47,7 +47,6 @@ public class AspectProxy implements Proxy {
     }
 
     public void before(Class<?> cls, Method method, Object[] params) {
-
     }
 
     public void after(Class<?> cls, Method method, Object[] params, Object result) {

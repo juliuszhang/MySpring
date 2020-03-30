@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,17 +15,23 @@ public class ProxyChain {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProxyChain.class);
 
+    //代理的对象类
     private final Class<?> targetClass;
 
+    //代理的对象实体
     private final Object targetObject;
 
+    //代理对象的方法
     private final Method targetMethod;
 
+    //代理后的对象
     private final MethodProxy methodProxy;
 
+    //方法参数
     private final Object[] methodParams;
 
-    private List<Proxy> proxyList = new ArrayList<>();
+    //代理/切面
+    private List<Proxy> proxyList;
 
     private int proxyIndex = 0;
 
@@ -37,7 +42,6 @@ public class ProxyChain {
         this.methodProxy = methodProxy;
         this.methodParams = methodParams;
         this.proxyList = proxyList;
-
     }
 
     public Class<?> getTargetClass() {
